@@ -2,6 +2,7 @@
 % and frequencies 300Hz and 500Hz. Add these three signals together and plot
 % the results. Please explain the results.
 % Note: x1 (t) has already been done in the class.
+
 clear all;
 
 %define the amplitudes and freqencies
