@@ -59,7 +59,7 @@ alias_sig = E * sin(2*pi*alias_f0*alias_t);   % signal array for plot
 fig2 = figure(2);
 plot(t,sig);
 hold('on');
-plot(alias_t, alias_sig, 'm-.')
+plot(alias_t, alias_sig, 'g-.')
 plot(tp, sample_vals, 'kx', 'MarkerSize',16)
 plot(tp, alias_sample_vals,'d','MarkerFaceColor', 'k');
 ylim([-11, 11]);
@@ -71,5 +71,67 @@ legend('1kHz Signal', '11kHz Alias Signal', '1kHz Sample Points', '11kHz Alias S
 
 % output the values for the first 10 samples in the alias sequence
 disp(alias_sample_vals);
+
+
+%{
+Question 4
+***********************************************************************
+Pulse wave generation code below was adapted from the lab3 file and
+modified as required
+***********************************************************************
+%}
+
+clear all;
+close all;
+
+T = 2*pi;   % signal period
+t= linspace(-T, T, 400);  % 400 samples between -2pi and 2pi
+
+% define the amplitude array for one full cycle, T = 2pi
+vp = zeros(1,200);  % populate with zeros, f(-pi:0) is off, i.e. 0
+vp(101:200) = 1;    % second half cycle is 'on', e.g. f(0:pi) = 1
+pulse = [vp,vp];    % define v for full sample range, 4pi
+
+figure(1)
+plot(t,pulse);
+xlabel('Time(s)');
+ylabel ('Amplitude(V)');
+title('Periodic Pulse Signal');
+set(gca,'XTick',-2*pi:pi:2*pi);
+ax.XTickLabel = {'-2\pi','-\pi','0','\pi','2\pi'};
+ylim([-.2, 1.2]);
+xlim([-2*pi, 2*pi]);
+
+clear all;
+
+% Qu7
+E = 1;
+T = 2*pi;
+tau = pi;
+DC = (E*tau)/T;
+f0=1/T;
+% no of samples per cycle = Fs/f0 = 10000/100 = 100
+% 4 cycles => 4 x 100 = 400 samples
+t= linspace(-T, T, 400);  % 400 samples between -2pi and 2pi
+sig= DC;
+figure(2)
+for n=1:1:50
+Cn = DC*exp(-j*pi*f0*n*tau)*sin(n*pi*tau/T)/(n*pi*tau/T);
+An = 2*abs(Cn);
+phin = angle(Cn);
+sig=sig +An*cos((2*pi*f0*n*t) + phin);
+plot(t,sig)
+pause (0.5)
+end
+
+xlabel('time (s)')
+ylabel('Amplitude (V)')
+title(' Synthesis of Periodic Pulse Signal by Adding its Fourier Components')
+grid on
+set(gca,'XTick',-2*pi:pi:2*pi);
+ax.XTickLabel = {'-2\pi','-\pi','0','\pi','2\pi'};
+ylim([-.2, 1.2]);
+xlim([-2*pi, 2*pi]);
+
 
 

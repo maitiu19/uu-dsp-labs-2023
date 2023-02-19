@@ -151,7 +151,7 @@ Ts = 1/Fs;
 t=[0:1:399]*Ts;
 %
 for i=1:1:20
-vp(i) = 10;
+vp(i) = 1;
 end
 for i=21:1:100
 vp(i)=0;
@@ -163,7 +163,6 @@ plot(t,pulse);
 xlabel('Time(s)');
 ylabel ('Amplitude(V)');
 title('Periodic Pulse Signal')
-grid on 
 
 % Qu7
 E = 10;
