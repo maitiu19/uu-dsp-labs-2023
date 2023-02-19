@@ -101,37 +101,68 @@ set(gca,'XTick',-2*pi:pi:2*pi);
 ax.XTickLabel = {'-2\pi','-\pi','0','\pi','2\pi'};
 ylim([-.2, 1.2]);
 xlim([-2*pi, 2*pi]);
+grid on
+
+
+%{
+
+For the Fourier part:
+
+This is working as a visual only, there is clearly some fundamental error
+due to a misunderstanding of the math, a coding error or both in here
+somewhere.
+
+Since this is an odd funciton, A_n will be zero, so was not included, but
+when it was included, it evaluated to a non-zero value, again, there is an
+error in here somewhere, this code doesn't work in my opinion
+
+It might be related to the fact that I am taking T to be 2pi, but
+evaluating over a period of 4pi (-2pi to +2pi), but adding 2*T to the
+equations for b_n and sig make it worse.
+
+2*T I think is justified mathematically, but that would mean 4*T for A_0
+which gives a value of 0.025, when (mean(vp) = 0.5, so I left this as T
+
+The main issue is with N, when N is small, <10, it is just a sine wave or
+straight line, when it is >10 it begins to resemble the function, 10
+components in this sequence should have a stronger resemblance to the true
+fucntion than a simle sine wave! Going larger, e.g. N>200, there amplitude
+is distorted, perhaps signal noise, but no idea where these errors are
+caused initially.
+
+%}
 
 clear all;
+close all;
 
-% Qu7
 E = 1;
-T = 2*pi;
-tau = pi;
-DC = (E*tau)/T;
-f0=1/T;
-% no of samples per cycle = Fs/f0 = 10000/100 = 100
-% 4 cycles => 4 x 100 = 400 samples
+T = 2*pi;   % signal period
 t= linspace(-T, T, 400);  % 400 samples between -2pi and 2pi
-sig= DC;
-figure(2)
-for n=1:1:50
-Cn = DC*exp(-j*pi*f0*n*tau)*sin(n*pi*tau/T)/(n*pi*tau/T);
-An = 2*abs(Cn);
-phin = angle(Cn);
-sig=sig +An*cos((2*pi*f0*n*t) + phin);
-plot(t,sig)
-pause (0.5)
+N = 100;
+% define the amplitude array for one full cycle, T = 2pi
+vp = zeros(1,200);  % populate with zeros, f(0:pi) is off, i.e. 0
+vp(101:200) = E;    % first half cycle is 'on', e.g. f(-pi:0) = 1
+vp = [vp, vp];
+
+% Evaluate the Fourier series over the full period
+a0 = 1/(2*T) * trapz(t, vp); % should be T*4 ??
+bn = zeros(1,N);
+for n = 1:N
+    bn(n) = 1/(T) * trapz(t, (vp .* sin((n * pi .* t)/(T))));
 end
 
-xlabel('time (s)')
-ylabel('Amplitude (V)')
-title(' Synthesis of Periodic Pulse Signal by Adding its Fourier Components')
-grid on
-set(gca,'XTick',-2*pi:pi:2*pi);
-ax.XTickLabel = {'-2\pi','-\pi','0','\pi','2\pi'};
-ylim([-.2, 1.2]);
-xlim([-2*pi, 2*pi]);
 
+% Compute the reconstructed signal
+sig = zeros(size(t));
+sig = sig + a0;
+for n = 1:N
+    sig = sig  + bn(n) * sin((n * pi .* t)/(T));
+end
 
-
+% Plot the original signal and the reconstructed signal
+figure(1);
+plot(t, vp);
+hold on;
+plot(t, sig, '--');
+title('True Signal vs Fourier Dervived Signal');
+legend('True Signal', 'Fourier Dervived Signal');
