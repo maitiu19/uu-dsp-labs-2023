@@ -12,8 +12,8 @@ samples taken will be 10, over a 10 millisecond period starting from zero
 ***********************************************************************
 %}
 
-clear all
-close all
+clear all;
+close all;
 fs = 10000;                 % 10kHz, sample frequency
 f0 = 1000;                  % 1kHz, signal frequency
 E = 10;                     % 10V, amplitude
@@ -113,7 +113,7 @@ figure(1)
 plot(t,pulse);
 xlabel('Time(s)');
 ylabel ('Amplitude(V)');
-title('Periodic Pulse Signal');
+title('Periodic Pulse Signal from -2\pi to 2\pi');
 set(gca,'XTick',-2*pi:pi:2*pi);
 ax.XTickLabel = {'-2\pi','-\pi','0','\pi','2\pi'};
 ylim([-.5, 1.5]);
@@ -191,4 +191,46 @@ ylabel ('Amplitude(V)');
 set(gca,'XTick',-2*pi:pi:2*pi);
 ax.XTickLabel = {'-2\pi','-\pi','0','\pi','2\pi'};
 xlim([-2*pi, 2*pi]);
+grid on
+
+
+%{
+************************************************************************
+The following block of code was taken from the week 3 lab, Qu.7, but
+adapted for the function described in this question
+
+I've included this since this is more reliable than the method used above
+which has some unknown errors somewhere, plus I realised after the week 4
+lab maybe the requirement was to use Complex Fourier for this question
+************************************************************************
+%}
+
+clear all;
+close all;
+
+E = 1;          % amplitude is 1V
+T = 2*pi;       % period cycle from -pi to pi, therefore T = 2pi
+tau = pi;       % tau/T is the on/off ratio, this pulse is 50/50
+DC = (E*tau)/T; % Duty Cycle
+Fs= 2*T;        % sampling over two periods
+f0= 1/T;
+
+% 500 sample points over two cycles, -2pi to 2pi
+t = linspace(-T, T, 500);
+sig= DC;
+
+% define the function's  Fourier series components and plot as each
+% component is added to the signal
+figure(2)
+for n=1:1:50
+    Cn = DC*exp(-j*pi*f0*n*tau)*sin(n*pi*tau/T)/(n*pi*tau/T);
+    An = 2*abs(Cn);
+    phin = angle(Cn);
+    sig=sig +An*cos((2*pi*f0*n*t) - phin);
+    plot(t,sig)
+    pause (0.5)
+end
+xlabel('time (s)')
+ylabel('Amplitude (V)')
+title(' Synthesis of Periodic Pulse Signal by Adding its Fourier Components')
 grid on
