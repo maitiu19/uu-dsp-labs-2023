@@ -120,9 +120,7 @@ ylim([-.5, 1.5]);
 xlim([-2*pi, 2*pi]);
 grid on
 
-
 %{
-
 For the Fourier part:
 
 This is working as a visual only, there is clearly some fundamental error
@@ -147,6 +145,8 @@ fucntion than a simle sine wave! Going larger, e.g. N>200, there amplitude
 is distorted, perhaps signal noise, but no idea where these errors are
 caused initially.
 
+trapz should be acureate enough (?) not to result in a completely different
+waveform at N= 1000, so not sure where the error is
 %}
 
 clear all;
