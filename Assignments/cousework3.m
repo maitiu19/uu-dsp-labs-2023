@@ -115,8 +115,81 @@ grid on
 ***********************************************************************
 Question 2
 
-Due to DFT symatry
+Due to DFT symmmetry, we only need the first half of samples from a signal
+(N/2+1), this is because the second half samples will have a corresponding
+conjugate in the first half of samples, i.e.:
+X(m) =  X^*(N - m) , where X* is the conjugate, in other words:
+
+x = exp(-j * 2pi) ==> x* = exp(j * 2pi)
+
+therefore the sample:
+X(0) =  5
+X(1) =  2 − j5
+X(2) =  −11.8 + j1.8
+X(3) =  12.85 + j1.2
+X(4) =  −1 − 3.4j
+X(5) =  0.5 − 0.866j
+X(6) =  6 − 1.9j
+X(7) =  12.8 + 5j
+
+will continue as:
+X(8) =  5
+X(9) =  2 + j5
+X(10) =  −11.8 - j1.8
+X(11) =  12.85 - j1.2
+X(12) =  −1 + 3.4j
+X(13) =  0.5 + 0.866j
+X(14) =  6 + 1.9j
+X(15) =  12.8 - 5j
 ***********************************************************************
 %}
+
+
+%{
+
+***********************************************************************
+Question 3
+***********************************************************************
+%}
+clear all;
+close all;
+
+fs = 4;
+ts = 1/fs;
+N = 0.75*fs;
+t = linspace(0,N/fs, N);
+x = 5 + 2*cos((2*pi*t) - pi/2) + 3*cos(4*pi*t);
+
+f_a = zeros(1,N);   % array for the analysis freq.
+
+for n = 0:N-1
+    %t = n *ts;
+    %x(n+1) = sin(2 * pi * 80 * t) + sin(2 * pi * 92 * t);
+    f_a(n+1) = (n * fs)/N;       % analysis freq.
+    for k = 0:N-1
+        p(k+1, n+1) = exp(-i * pi * 2 * n * k / N);
+    end
+end
+
+Xk = x * p;
+
+
+mag = abs(Xk);
+phase = angle(Xk);
+
+subplot(2,1,1)
+stem(f_a, mag)
+title('Signal Magnitude Spectra')
+grid on
+subplot(2,1,2)
+stem(f_a,phase)
+xlabel('Frequency (Hz)')
+ylabel('Phase (Radians)')
+title('Signal Phase Spectra')
+
+
+grid on
+
+
 
 
