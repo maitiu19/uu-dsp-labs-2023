@@ -6,14 +6,14 @@ Comments on output:
 Shape of the Amplitude sketch is in line with the theory, of the 100 points
 sampled, the plot is symetrical at the halfway point - this is because for
 any X(k) where 0 <= k <= (N/2 -1), X(k) is the complex conjugate of X(N-k),
-so the magnitudes will be equal, hence the symetery
+so the magnitudes will be equal, hence the symmetry
 
 Regarding the sample peaks - the maximum |X(k)| is close to 50 - the reason
 for this is that when a signal has a frequency of f<2*Fs (which is the
-case here in order to satisty the Nyquist freq.), the magnetude of the
-signal will be M = A * N/2 where A is the signal amplitude.
+case here in order to satisty the Nyquist freq.), the max. magnitude of the
+DFT component will be M = A * N/2 where A is the signal amplitude.
 
-Finally, the freqency bins, the peak magnitude of ~50 at f = 80Hz (see
+Finally, the frequency bins, the peak magnitude of ~50 at f = 80Hz (see
 plot), does not mean that the highest magnitude component in X(k) has a
 frequency of 80Hz. Since the x-axis is the analysis frequency (Fa), given by
 equation:
@@ -22,7 +22,7 @@ Fa(k) = k*fs / N => Fa(18) = 18 * 500 / 100 = 90Hz
 Matlab logic for this is below the plot, 
 I'm not 100% certain it  is correct, there might be a mistake with the
 matlab index conversion to k, but the point is that the frequency of the
-largest magnitude component will depend on the sample frequency
+largest magnitude component will depend on the sample frequency, Fs
 
 Above theory from:
 R. G. Lyons, “3.5 DFT Frequency Axis,” in Understanding Digital Signal
@@ -115,11 +115,11 @@ X(15) =  12.8 - 5j
 Question 3
 
 Comments on the output:
-No comment on the output was asked, but feel that it is necessary to get
-marks in this question(?). The sample rate is 4Hz, i.e. 4 samples
-per second. The lowest signal frequency is 1Hz fom the first term,
-cos(2*pi*t - 90deg). So we should have N samples given by:
- N = freq_min * fs = 1 * 4 = 4 samples minimum. 
+The sample rate is 4Hz, i.e. 4 samples per second. 
+The lowest signal frequency is 1Hz fom the first term:
+    cos(2*pi*t - 90deg). 
+So we should have N samples given by:
+    N = freq_min * fs = 1 * 4 --> 4 samples minimum. 
 
 But we're asked to sample over 3/4s at a sample rate of 4/s, ie. 3 samples
 are taken. This isn't enough and results in signal leakage (e.g. at bin 0,
